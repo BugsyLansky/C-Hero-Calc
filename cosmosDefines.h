@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <cmath>
 
 #include "cosmosClasses.h"
 
@@ -208,3 +209,4 @@ void addLeveledHero(Monster hero, int level);
 Monster getLeveledHero(const Monster & m, int rarity, int level);
 
 #endif
+

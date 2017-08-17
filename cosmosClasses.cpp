@@ -62,6 +62,14 @@ void Army::print() {
     } cout << ")" << endl; 
 }
 
+string Army::getMonsterList() {
+    string list;
+    for (int i = this->monsterAmount-1; i >= 0; i--) {
+        list.append(this->monsters[i]->name).append(" "); // Print in reversed Order
+    }
+    return list;
+}
+
 // Function for sorting FightResults by followers (ascending)
 bool hasFewerFollowers(const Army & a, const Army & b) {
     return (a.followerCost < b.followerCost);
