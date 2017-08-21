@@ -24,17 +24,17 @@ bool askYesNoQuestion(string question) {
 
 // Output things on the command line. Using shouldOutput this can be easily controlled globally
 void debugOutput(int timeStamp, string message, bool shouldOutput, bool finishLastOutput, bool finishLine) {
-    if (shouldOutput) { 
+    if (shouldOutput) {
         if (finishLastOutput) {
-            cout << "Done! (" << right << setw(3) << time(NULL) - timeStamp << " seconds) " << endl; 
+            cout << "Done! (" << right << setw(3) << time(NULL) - timeStamp << " seconds) " << endl;
         }
         if (message != "") {
             cout << left << setw(50) << message;
             if (finishLine) {
                 cout << endl;
             }
-        } 
-    }   
+        }
+    }
 }
 
 
@@ -45,7 +45,7 @@ vector<int> takeHerolevelInput() {
     string input;
     fstream heroFile;
     heroFile.exceptions(fstream::failbit);
-    
+
     if (askYesNoQuestion("Do you want to load hero levels from file?")) {
         try {
             heroFile.open("heroLevels" + heroVersion, fstream::in);
@@ -67,7 +67,7 @@ vector<int> takeHerolevelInput() {
             getline(cin, input);
             levels.push_back(stoi(input));
         }
-        
+
         // Write Hero Levels to file to use next time
         heroFile.open("heroLevels" + heroVersion, fstream::out);
         for (size_t i = 0; i < levels.size()-1; i++) {
@@ -84,12 +84,12 @@ vector<int> takeHerolevelInput() {
 vector<Monster *> takeLineupInput(string prompt) {
     vector<Monster *> lineup {};
     string questString = "quest";
-    
+
     string input;
     cout << prompt << endl;
     cout << "Enter Monsters separated with commas or type f.e. quest17 to get the lineup for quest 17." << endl;
     getline(cin, input);
-    
+
     if (input.compare(0, questString.length(), questString) == 0) {
         int questNumber = stoi(input.substr(questString.length(), 2));
         lineup = makeMonstersFromStrings(quests[questNumber]);
@@ -97,7 +97,7 @@ vector<Monster *> takeLineupInput(string prompt) {
         vector<string> stringLineup = split(input, ",");
         lineup = makeMonstersFromStrings(stringLineup);
     }
-    
+
     return lineup;
 }
 
@@ -105,7 +105,7 @@ vector<Monster *> takeLineupInput(string prompt) {
 vector<Monster *> makeMonstersFromStrings(vector<string> stringLineup) {
     vector<Monster *> lineup {};
     pair<Monster, int> heroData;
-    
+
     for(size_t i = 0; i < stringLineup.size(); i++) {
         if(stringLineup[i].find(":") != stringLineup[i].npos) {
             heroData = parseHeroString(stringLineup[i]);
