@@ -133,7 +133,9 @@ void expand(vector<Army> & newPureArmies, vector<Army> & newHeroArmies,
 //            cout << "  ";
 //            tempArmy.print();
 //            best = tempArmy;
-//            followerUpperBound = tempArmy.followerCost;
+//            if (followerUpperBound > tempArmy.followerCost) {
+//                followerUpperBound = tempArmy.followerCost;
+//            }
 //
 //            // Try to replace monsters in the setup with heroes to save followers
 //            greedyHeroes = greedy;
@@ -151,9 +153,11 @@ void expand(vector<Army> & newPureArmies, vector<Army> & newHeroArmies,
 //            }
 //            cout << "  ";
 //            tempArmy = Army(greedyHeroes);
-//            best = tempArmy;
-//            followerUpperBound = tempArmy.followerCost;
 //            tempArmy.print();
+//            best = tempArmy;
+//            if (followerUpperBound > tempArmy.followerCost) {
+//                followerUpperBound = tempArmy.followerCost;
+//            }
 //        } else {
 //            cout << "  Could not find valid solution while being greedy" << endl;
 //        }
@@ -171,7 +175,7 @@ int solveInstance(bool debugInfo) {
 
     // Get first Upper limit on followers
 //    getQuickSolutions(targetArmy, maxMonstersAllowed);
-//    if (!askYesNoQuestion("Continue calculation?")) {return 0;}
+//    if (!askYesNoQuestion("Continue calculation?", "  Continuing will most likely result in a cheaper solution but could consume a lot of RAM.\n")) {return 0;}
 //    cout << endl;
 
     vector<Army> pureMonsterArmies {}; // initialize with all monsters
@@ -426,27 +430,12 @@ int main(int argc, char** argv) {
     };
 
     // Use these variables to specify the fight
-    bool ignoreConsole = false;                         // Disables the console question whether you want to read from file or command line
     bool debugInfo = false;                             // Set this to true if you want to see how far the execution is and how lone the execution took altogether
-    bool manualInput = false;                           // Set this to true if you want nothing to do with this file and just want to input stuff over the command line like you're used to
 
-    cout << "Welcome to Diceycle's PvE Quest Solver!" << endl;
+    cout << welcomeMessage << endl;
+    cout << helpMessage << endl;
 
-    if (!ignoreConsole) {
-        manualInput = askYesNoQuestion("Do you want to input everything via command line?");
-    }
-    // Collect the Data via Command Line if the user wants
-    if (manualInput) {
-        try {
-            yourHeroLevels = takeHerolevelInput();
-        } catch (const exception & e) {
-            haltExecution();
-            return EXIT_FAILURE;
-        }
-    } else {
-        cout << "Taking data from script" << endl;
-    }
-
+    yourHeroLevels = takeHerolevelInput();
     initializeUserHeroes(yourHeroLevels);
     initMonsterData();
 
