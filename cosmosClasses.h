@@ -6,11 +6,12 @@
 #include <iostream>
 #include <iomanip>
 #include <cstdint>
+#include <sstream>
 
 using namespace std;
 
 // Define types of HeroSkills and Elements
-enum SkillType {nothing, buff, protect, aoe, pAoe, heal, berserk, friends};
+enum SkillType {nothing, buff, protect, aoe, pAoe, heal, berserk, friends, helmet};
 enum Element {
     earth   = 0,
     air     = 1, 
@@ -74,6 +75,7 @@ class Army {
         int8_t monsterAmount;
         
         void add(Monster * m);
+        string toString();
         void print();
         string getMonsterList();
         Army(vector<Monster *> monsters = {});

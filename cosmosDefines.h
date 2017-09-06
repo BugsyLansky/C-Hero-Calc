@@ -83,7 +83,7 @@ static vector<Monster> monsterBaseList { // Raw Monster Data, holds the actual O
     Monster(234, 136, 5676000, "f15", fire)
 };
 static vector<Monster> baseHeroes { // Raw, unleveld Hero Data, holds actual Objects
-    Monster( 45, 20, 0, "lady of twilight",  air,   {protect, all, air, 1}),
+    Monster( 45, 20, 0, "ladyoftwilight",    air,   {protect, all, air, 1}),
     Monster( 70, 30, 0, "tiny",              earth, {aoe,     all, earth, 2}),
     Monster( 90, 40, 0, "nebra",             fire,  {buff,    all, fire, 4}),
     Monster( 50, 12, 0, "james",             earth, {pAoe,    all, earth, 1}),
@@ -116,19 +116,23 @@ static vector<Monster> baseHeroes { // Raw, unleveld Hero Data, holds actual Obj
     Monster( 18, 50, 0, "aural",             water, {berserk, self, water, 1.2}),
     Monster( 46, 46, 0, "geror",             air,   {friends, self, air, 1.2}),
     
+    Monster( 66, 44, 0, "veildur",           earth, {helmet,  all, earth, 3}),
+    Monster( 72, 48, 0, "brynhildr",         air,   {helmet,  all, air, 4}),
+    Monster( 78, 52, 0, "groth",             fire,  {helmet,  all, fire, 5}),
+    
     Monster( 20, 10, 0, "valor",             air,   {protect, air, air, 1}),
     Monster( 30,  8, 0, "rokka",             earth, {protect, earth, earth, 1}),
     Monster( 24, 12, 0, "pyromancer",        fire,  {protect, fire, fire, 1}),
     Monster( 50,  6, 0, "bewat",             water, {protect, water, water, 1}),
     
     Monster( 22, 32, 0, "nicte",             air,   {buff,    air, air, 4}),
-    Monster( 46, 16, 0, "forest druid",      earth, {buff,    earth, earth, 4}),
+    Monster( 46, 16, 0, "forestdruid",       earth, {buff,    earth, earth, 4}),
     Monster( 32, 24, 0, "ignitor",           fire,  {buff,    fire, fire, 4}),
     Monster( 58, 14, 0, "undine",            water, {buff,    water, water, 4}),
 };
 
 static map<string, int> rarities { // hero rarities
-    {"lady of twilight",  0},
+    {"ladyoftwilight",  0},
     {"tiny",  1},
     {"nebra",  2},
     {"james",  2},  
@@ -161,13 +165,17 @@ static map<string, int> rarities { // hero rarities
     {"aural", 1},
     {"geror", 2},
     
+    {"veildur", 2},
+    {"brynhildr", 2},
+    {"groth", 2},
+    
     {"valor",  0},
     {"rokka",  0},
     {"pyromancer",  0},
     {"bewat",  0},
     
     {"nicte",  1},
-    {"forest druid", 1},
+    {"forestdruid", 1},
     {"ignitor", 1},
     {"undine",1}
 };

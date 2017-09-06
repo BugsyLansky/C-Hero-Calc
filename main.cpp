@@ -24,21 +24,28 @@ Army targetArmy;
 size_t targetArmySize;
 
 int followerUpperBound;
+bool customFollowers;
 Army best;
 
 // Simulates fights with all armies against the target. armies will contain armies with the results written in.
 void simulateMultipleFights(vector<Army> & armies) {
+    bool newFound = false;
+    
     for (size_t i = 0; i < armies.size(); i++) {
         simulateFight(armies[i], targetArmy);
         if (!armies[i].lastFightData.rightWon) {  // left (our side) wins:
             if (armies[i].followerCost < followerUpperBound) {
+                if (!newFound) {
+                    cout << endl;
+                }
+                newFound = true;
                 followerUpperBound = armies[i].followerCost;
                 best = armies[i];
-//                cout << endl << "    New Solution: " << endl << "  "; 
-//                best.print();
+                debugOutput(time(NULL), "    " + best.toString(), true, false, true);
             }
         }
     }
+    debugOutput(time(NULL), " ", newFound, false, false);
 }
 
 void expand(vector<Army> & newPureArmies, vector<Army> & newHeroArmies, 
@@ -49,7 +56,7 @@ void expand(vector<Army> & newPureArmies, vector<Army> & newHeroArmies,
     int remainingFollowers;
     size_t availableMonstersSize = availableMonsters.size();
     size_t availableHeroesSize = availableHeroes.size();
-    vector<bool> usedHeroes; usedHeroes.reserve(availableHeroesSize);
+    vector<bool> usedHeroes; usedHeroes.resize(availableHeroesSize, false);
     size_t i, j, m;
     SkillType currentSkill;
     bool friendsActive;
@@ -365,6 +372,13 @@ int solveInstance(bool debugInfo) {
 
 int main(int argc, char** argv) {
     
+    if (argc == 2) {
+        initConfigFile(argv[1]);
+        useConfigFile = true;
+    } else {
+        useConfigFile = false;
+    }
+    
     // Declare Variables
     vector<Monster *> friendLineup {};
     vector<Monster *> hostileLineup {};
@@ -388,6 +402,7 @@ int main(int argc, char** argv) {
          0, 0, 0,         // "k41ry", "t4urus", "tr0n1x"
          0, 0, 0,         // "aquortis", "aeris", "geum"
          0, 0, 0,         // "rudean","aural","geror"
+         0, 0, 0,         // "veildur","brynhildr","groth"
          0, 0, 0, 0,      // "valor","rokka","pyromancer","bewat"
          0, 0, 0, 0       // "nicte", "forest druid","ignitor","undine"
     }; 
@@ -412,7 +427,6 @@ int main(int argc, char** argv) {
     bool userWantsContinue = true;
     while (userWantsContinue) {
         // Initialize global Data
-        followerUpperBound = numeric_limits<int>::max();
         best = Army();
         initMonsterData();
         
@@ -424,13 +438,18 @@ int main(int argc, char** argv) {
             maxMonstersAllowed = stoi(getResistantInput("Enter how many monsters are allowed in the solution: ", maxMonstersAllowedHelp, integer));
             minimumMonsterCost = stoi(getResistantInput("Set a lower follower limit on monsters used: ", minimumMonsterCostHelp, integer));
             followerUpperBound = stoi(getResistantInput("Set an upper follower limit that you want to use: ", maxFollowerHelp, integer));
-            if (followerUpperBound < 0) {
-                followerUpperBound = numeric_limits<int>::max();
-            }
         } else {
             cout << "Taking data from script" << endl;
             targetArmy = Army(makeMonstersFromStrings(stringLineup));
             targetArmySize = targetArmy.monsterAmount;
+        }
+        
+        // Set Upper Bound Correctly
+        if (followerUpperBound < 0) {
+            followerUpperBound = numeric_limits<int>::max();
+            customFollowers = false;
+        } else {
+            customFollowers = true;
         }
         
         filterMonsterData(minimumMonsterCost);
@@ -456,7 +475,7 @@ int main(int argc, char** argv) {
         
         totalTime = solveInstance(debugInfo);
         // Last check to see if winning combination wins:
-        if (followerUpperBound < numeric_limits<int>::max()) {
+        if ((customFollowers && best.monsterAmount > 0) || (!customFollowers && followerUpperBound < numeric_limits<int>::max())) {
             best.lastFightData.valid = false;
             simulateFight(best, targetArmy);
             if (best.lastFightData.rightWon) {

@@ -11,8 +11,11 @@
 
 using namespace std;
 
-const string heroVersion = "2.5.1";
+const string heroVersion = "2.6.0";
 const string heroLevelFileName = "heroLevels" + heroVersion;
+
+extern bool useConfigFile;
+extern ifstream configFile;
 
 const string welcomeMessage = "Welcome to Diceycle's PvE Instance Solver!";
 const string helpMessage = "If you don't know what to do you can type help at any time to get an explanation about the current step.";
@@ -38,8 +41,8 @@ const string heroInputHelp =
 const string lineupInputHelp = 
     "  Enter Monsters separated by a comma and no spaces.\n"
     "  Normal monsters are written with their element (a,e,w,f) and their tier number. So the level 5 water monster is w5.\n"
-    "  Heroes are written first with their full name and a colon(:) followed by their level. For example: forest druid:50\n"
-    "  Full example: a1,geror:22,f13,w2,lady of twilight:1\n"
+    "  Heroes are written first with their full name and a colon(:) followed by their level. For example: forestdruid:50\n"
+    "  Full example: a1,geror:22,f13,w2,ladyoftwilight:1\n"
     "  The other alternative is selecting a quest from the game. For example: Typing quest23 loads the lineup for the 23rd quest.\n";
     
 const string maxMonstersAllowedHelp =
@@ -60,6 +63,8 @@ const string maxFollowerHelp =
     "But then you won't be able to know how many followers you are missing to beat the lineup. Your choice.\n"
     "  Enter -1 if you don't want to set the limit yourself.\n";
     
+// Initialize a config file provided by filename
+void initConfigFile(string configFileName);
 
 // Wait for user input before continuing. Used to stop program from colsing outside of a command line.
 void haltExecution();

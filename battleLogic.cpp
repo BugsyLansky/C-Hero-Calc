@@ -101,6 +101,9 @@ void simulateFight(Army & left, Army & right, bool verbose) {
                     aoeDamageLeft += skill->amount;
                 } else if (skillType == pAoe && i == leftLost) {
                     paoeDamageLeft += leftLineup[i]->damage;
+                } else if (skillType == helmet && (skillTarget == all || skillTarget == leftLineup[leftLost]->element)) {
+                    protectionLeft += skill->amount;
+                    damageBuffLeft += skill->amount;
                 }
             }
         }
@@ -130,13 +133,11 @@ void simulateFight(Army & left, Army & right, bool verbose) {
                     aoeDamageRight += skill->amount;
                 } else if (skillType == pAoe && i == rightLost) {
                     paoeDamageRight += rightLineup[i]->damage;
+                } else if (skillType == helmet && (skillTarget == all || skillTarget == rightLineup[rightLost]->element)) {
+                    protectionRight += skill->amount;
+                    damageBuffRight += skill->amount;
                 }
             }
-        }
-        
-        // Add last effects of abilities and start resolving the turn
-        if (leftLost >= leftArmySize || rightLost >= rightArmySize) {
-            break; // At least One army was beaten
         }
         
         // Heal everything that hasnt died
@@ -155,6 +156,11 @@ void simulateFight(Army & left, Army & right, bool verbose) {
         }
         if (rightCumAoeDamageTaken < 0) {
             rightCumAoeDamageTaken = 0;
+        }
+        
+        // Add last effects of abilities and start resolving the turn
+        if (leftLost >= leftArmySize || rightLost >= rightArmySize) {
+            break; // At least One army was beaten
         }
         
         // Get Base Damage for this Turn

@@ -28,17 +28,23 @@ Army best;
 
 // Simulates fights with all armies against the target. armies will contain armies with the results written in.
 void simulateMultipleFights(vector<Army> & armies) {
+    bool newFound = false;
+
     for (size_t i = 0; i < armies.size(); i++) {
         simulateFight(armies[i], targetArmy);
         if (!armies[i].lastFightData.rightWon) {  // left (our side) wins:
             if (armies[i].followerCost < followerUpperBound) {
+                //if (!newFound) {
+                //    cout << endl;
+                //}
+                //newFound = true;
                 followerUpperBound = armies[i].followerCost;
                 best = armies[i];
-//                cout << endl << "    New Solution: " << endl << "  ";
-//                best.print();
+                debugOutput(time(NULL), "    " + best.toString(), false, false, true);
             }
         }
     }
+    debugOutput(time(NULL), " ", newFound, false, false);
 }
 
 void expand(vector<Army> & newPureArmies, vector<Army> & newHeroArmies,
@@ -49,7 +55,7 @@ void expand(vector<Army> & newPureArmies, vector<Army> & newHeroArmies,
     int remainingFollowers;
     size_t availableMonstersSize = availableMonsters.size();
     size_t availableHeroesSize = availableHeroes.size();
-    vector<bool> usedHeroes; usedHeroes.reserve(availableHeroesSize);
+    vector<bool> usedHeroes; usedHeroes.resize(availableHeroesSize, false);
     size_t i, j, m;
     SkillType currentSkill;
     bool friendsActive;
@@ -84,7 +90,7 @@ void expand(vector<Army> & newPureArmies, vector<Army> & newHeroArmies,
                     }
                 }
             }
-            for (m = 0; m < availableMonstersSize && availableMonsters[m]->cost < remainingFollowers; m++) {
+            for (m = 0; m < availableMonstersSize && availableMonsters[m]->cost < remainingFollowers && availableMonsters[m]->cost > minimumMonsterCost; m++) {
                 newHeroArmies.push_back(oldHeroArmies[i]);
                 newHeroArmies.back().add(availableMonsters[m]);
                 newHeroArmies.back().lastFightData.valid = !friendsActive;
@@ -403,10 +409,10 @@ int main(int argc, char** argv) {
                       {1, 1, 1},
                       {1, 1, 1}, // 15
                       {1, 1, 0},
+                      {1, 1, 1},
                       {1, 1, 0},
                       {1, 1, 0},
-                      {1, 0, 0},
-                      {1, 0, 0}, // 20
+                      {1, 1, 0}, // 20
                       {0, 0, 0},
                       {0, -1, -1},
                       {0, -1, -1},
@@ -451,8 +457,9 @@ int main(int argc, char** argv) {
 
         cout << "│ quest " << setw(2) << questNumber << " │" << setw(25) << targetArmy.getMonsterList() << "│";
         for (maxMonstersAllowed = 6; maxMonstersAllowed >= 4; --maxMonstersAllowed ) {
-            followerUpperBound = numeric_limits<int>::max();
             best = Army();
+            minimumMonsterCost = 0;
+            followerUpperBound = numeric_limits<int>::max();
 
             if (yourLevelDone[questNumber][6 - maxMonstersAllowed] == 0) {
                 totalTime += solveInstance(debugInfo);

@@ -1,16 +1,34 @@
 #include "inputProcessing.h"
 
+bool useConfigFile;
+ifstream configFile;
+
+// Initialize a config file provided by filename
+void initConfigFile(string configFileName) {
+    configFile = ifstream(configFileName);
+}
+
 // Wait for user input before continuing. Used to stop program from closing outside of a command line.
 void haltExecution() {
     cout << "Press enter to continue...";
     cin.get();
 }
 
+// Method for handling ALL input. Gives access to help, error resistance and config file for input.
 string getResistantInput(string query, string help, QueryType queryType) {
     string inputString;
     while (true) {
         cout << query;
-        getline(cin, inputString);
+        if (useConfigFile) {
+            useConfigFile = (bool) getline(configFile, inputString);
+        } 
+        if (!useConfigFile) {
+            getline(cin, inputString);
+        }
+        inputString = split(inputString, " ")[0];
+        if (useConfigFile) {
+            cout << inputString << endl;
+        }
         if (inputString == "help") {
             cout << help;
         } else {
@@ -46,10 +64,10 @@ bool askYesNoQuestion(string questionMessage, string help) {
 void debugOutput(int timeStamp, string message, bool shouldOutput, bool finishLastOutput, bool finishLine) {
     if (shouldOutput) {
         if (finishLastOutput) {
-            cout << "Done! (" << right << setw(3) << time(NULL) - timeStamp << " seconds) " << endl;
+            cout << "Done! (" << right << setw(3) << time(NULL) - timeStamp << " seconds)" << endl; // Exactly 20 bytes long
         }
         if (message != "") {
-            cout << left << setw(50) << message;
+            cout << left << setw(60) << message; // With 60 there is exactly enough space to fit the finish message in on a windows cmd
             if (finishLine) {
                 cout << endl;
             }
