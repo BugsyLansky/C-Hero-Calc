@@ -60,9 +60,10 @@ void expand(vector<Army> & newPureArmies, vector<Army> & newHeroArmies,
     size_t i, j, m;
     SkillType currentSkill;
     bool friendsActive;
+    bool stillValid = currentArmySize <= 3;
     
     for (i = 0; i < oldPureArmies.size(); i++) {
-        if (!oldPureArmies[i].lastFightData.dominated) {
+        if (!oldPureArmies[i].lastFightData.dominated || stillValid) {
             remainingFollowers = followerUpperBound - oldPureArmies[i].followerCost;
             for (m = 0; m < availableMonstersSize && availableMonsters[m]->cost < remainingFollowers && availableMonsters[m]->cost > minimumMonsterCost; m++) {
                 newPureArmies.push_back(oldPureArmies[i]);
@@ -79,7 +80,7 @@ void expand(vector<Army> & newPureArmies, vector<Army> & newHeroArmies,
     }
     
     for (i = 0; i < oldHeroArmies.size(); i++) {
-        if (!oldHeroArmies[i].lastFightData.dominated) {
+        if (!oldHeroArmies[i].lastFightData.dominated || stillValid) {
             friendsActive = false;
             remainingFollowers = followerUpperBound - oldHeroArmies[i].followerCost;
             for (j = 0; j < currentArmySize; j++) {
@@ -408,10 +409,10 @@ int main(int argc, char** argv) {
     }; 
     
     // Flow Control Variables
-    bool ignoreConsole = false;                         // Disables the console question whether you want to read from file or command line
+    bool ignoreConsole = true;                          // Disables the console question whether you want to read from file or command line
     bool individual = false;                            // Set this to true if you want to simulate individual fights (lineups will be promted when you run the program)
     bool debugInfo = true;                              // Set this to true if you want to see how far the execution is and how lone the execution took altogether
-    bool manualInput = false;                           // Set this to true if you want nothing to do with this file and just want to input stuff over the command line like you're used to
+    bool manualInput = true;                           // Set this to true if you want nothing to do with this file and just want to input stuff over the command line like you're used to
     
     int totalTime;
     
