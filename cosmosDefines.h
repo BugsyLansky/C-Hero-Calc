@@ -83,9 +83,6 @@ static vector<Monster> monsterBaseList { // Raw Monster Data, holds the actual O
     Monster(234, 136, 5676000, "f15", fire)
 };
 static vector<Monster> baseHeroes { // Raw, unleveld Hero Data, holds actual Objects
-    Monster( 45, 20, 0, "ladyoftwilight",    air,   {protect, all, air, 1}),
-    Monster( 70, 30, 0, "tiny",              earth, {aoe,     all, earth, 2}),
-    Monster( 90, 40, 0, "nebra",             fire,  {buff,    all, fire, 4}),
     Monster( 50, 12, 0, "james",             earth, {pAoe,    all, earth, 1}),
     
     Monster( 22, 14, 0, "hunter",            air,   {buff,    air, air, 2}),
@@ -116,6 +113,14 @@ static vector<Monster> baseHeroes { // Raw, unleveld Hero Data, holds actual Obj
     Monster( 18, 50, 0, "aural",             water, {berserk, self, water, 1.2}),
     Monster( 46, 46, 0, "geror",             air,   {friends, self, air, 1.2}),
     
+    Monster( 30, 16, 0, "ourea",             earth, {buff,    earth, earth, 3}),
+    Monster( 48, 20, 0, "erebus",            fire,  {champion,fire, fire, 2}),
+    Monster( 62, 36, 0, "pontus",            water, {adapt,   self, water, 2}),
+    
+    Monster( 45, 20, 0, "ladyoftwilight",    air,   {protect, all, air, 1}),
+    Monster( 70, 30, 0, "tiny",              earth, {aoe,     all, earth, 2}),
+    Monster( 90, 40, 0, "nebra",             fire,  {buff,    all, fire, 8}),
+    
     Monster( 66, 44, 0, "veildur",           earth, {champion,all, earth, 3}),
     Monster( 72, 48, 0, "brynhildr",         air,   {champion,all, air, 4}),
     Monster( 78, 52, 0, "groth",             fire,  {champion,all, fire, 5}),
@@ -129,29 +134,30 @@ static vector<Monster> baseHeroes { // Raw, unleveld Hero Data, holds actual Obj
     Monster( 46, 16, 0, "forestdruid",       earth, {buff,    earth, earth, 4}),
     Monster( 32, 24, 0, "ignitor",           fire,  {buff,    fire, fire, 4}),
     Monster( 58, 14, 0, "undine",            water, {buff,    water, water, 4}),
+    
+    Monster( 52, 20, 0, "chroma",            air,   {protect, air, air, 4}),
+    Monster( 26, 44, 0, "petry",             earth, {protect, earth, earth, 4}),
+    Monster( 58, 22, 0, "zaytus",            fire,  {protect, fire, fire, 4}),
 };
 
 static map<string, int> rarities { // hero rarities
-    {"ladyoftwilight",  0},
-    {"tiny",  1},
-    {"nebra",  2},
-    {"james",  2},  
+    {"james", 2},  
   
-    {"hunter",  0},
-    {"shaman",  1},
-    {"alpha",  2},
+    {"hunter", 0},
+    {"shaman", 1},
+    {"alpha", 2},
     
-    {"carl",  0},
-    {"nimue",  1},
-    {"athos",  2},
+    {"carl", 0},
+    {"nimue", 1},
+    {"athos", 2},
     
-    {"jet",  0},
-    {"geron",  1},
-    {"rei",  2},
+    {"jet", 0},
+    {"geron", 1},
+    {"rei", 2},
     
-    {"ailen",  0},
-    {"faefyr",  1},
-    {"auri",  2},
+    {"ailen", 0},
+    {"faefyr", 1},
+    {"auri", 2},
     
     {"k41ry", 0},
     {"t4urus", 1},
@@ -165,19 +171,31 @@ static map<string, int> rarities { // hero rarities
     {"aural", 1},
     {"geror", 2},
     
+    {"ourea", 0},
+    {"erebus", 1},
+    {"pontus", 2},
+    
+    {"ladyoftwilight", 0},
+    {"tiny", 1},
+    {"nebra", 2},
+    
     {"veildur", 2},
     {"brynhildr", 2},
     {"groth", 2},
     
-    {"valor",  0},
-    {"rokka",  0},
-    {"pyromancer",  0},
-    {"bewat",  0},
+    {"valor", 0},
+    {"rokka", 0},
+    {"pyromancer", 0},
+    {"bewat", 0},
     
     {"nicte",  1},
     {"forestdruid", 1},
     {"ignitor", 1},
-    {"undine",1}
+    {"undine",1},
+    
+    {"chroma", 1},
+    {"petry", 1},
+    {"zaytus", 1}
 };
 
 static vector<vector<string>> quests { // Contains all quest lineups for easy referencing
@@ -212,7 +230,7 @@ static vector<vector<string>> quests { // Contains all quest lineups for easy re
 	{"a10", "a8", "a9", "a10", "a9"},
 	{"a10", "w7", "f7", "e8", "a9", "a9"},
 	{"e10", "e10", "e10", "f10"},               //30
-	{"e9", "f10", "f9", "f9", "a10", "a8"},
+	{"e9", "f10", "f9", "f9", "a10", "a7"},
 	{"w1", "a9", "f10", "e9", "a10", "w10"},
 	{"e9", "a9", "a9", "f9", "a9", "f10"},
 	{"f8", "e9", "w9", "a9", "a10", "a10"},
@@ -222,6 +240,21 @@ static vector<vector<string>> quests { // Contains all quest lineups for easy re
 	{"f10", "e10", "w10", "a10", "w10", "w10"},
 	{"w9", "a10", "w10", "e10", "a10", "a10"},
 	{"w10", "a10", "w10", "a10", "w10", "a10"}, //40
+    {"e12", "e11", "a11", "f11", "a12"},
+    {"a11", "a11", "e11", "a11", "e11", "a11"},
+    {"a8", "a11", "a10", "w10", "a12", "e12"},
+    {"a10", "f10", "a12", "f10", "a10", "f12"},
+    {"w4", "e11", "a12", "a12", "w11", "a12"},  //45
+    {"a11", "a12", "a11", "f11", "a11", "f10"},
+    {"f12", "w11", "e12", "a12", "w12"},
+    {"a11", "a11", "e12", "a11", "a11", "a13"},
+    {"a13", "f13", "f13", "f13"},
+    {"f12", "f12", "f12", "f12", "f12", "f12"}, //50
+    {"a11", "e11", "a13", "a11", "e11", "a13"},
+    {"f13", "w13", "a13", "f12", "f12"},
+    {"a9", "f13", "f13", "f12", "a12", "a12"},
+    {"a13", "a13", "a12", "a12", "f11", "f12"},
+    {"a11", "f10", "a11", "e14", "f13", "a11"}, //55
 };
 
 // Make sure all the values are set
